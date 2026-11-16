@@ -4,6 +4,7 @@ import path from 'node:path';
 import { site, fullAddress, waLink } from './src/site.mjs';
 import { practice } from './src/practice.mjs';
 import { posts } from './src/posts.mjs';
+import { gallery } from './src/gallery.mjs';
 
 const OUT = 'dist';
 const BUILT = new Date().toISOString().slice(0, 10);
@@ -32,6 +33,7 @@ const icon = {
 const nav = [
   ['practice-areas.html', 'Practice areas'],
   ['about.html', 'About'],
+  ['gallery.html', 'Gallery'],
   ['legal-guides.html', 'Legal guides'],
   ['contact.html', 'Contact'],
 ];
@@ -71,6 +73,7 @@ function footer(rel) {
       <h2 class="footer-h">The practice</h2>
       <ul class="footer-links">
         <li><a href="${rel}about.html">About the advocate</a></li>
+        <li><a href="${rel}gallery.html">Office opening photos</a></li>
         <li><a href="${rel}legal-guides.html">Legal guides</a></li>
         <li><a href="${rel}contact.html">Contact and directions</a></li>
         <li><a href="${rel}disclaimer.html">Disclaimer</a></li>
@@ -463,6 +466,11 @@ for (const g of posts) {
 
 // ---------- about ----------
 
+const photoPicture = (rel, p, sizes) => {
+  const base = `${rel}assets/img/office-opening/opening-${p.n}`;
+  return `<picture><source type="image/webp" srcset="${base}-800.webp ${p.w}w, ${base}-1600.webp ${p.fw}w" sizes="${sizes}"><img src="${base}-800.jpg" width="${p.w}" height="${p.h}" alt="${esc(p.alt)}" loading="lazy" decoding="async"></picture>`;
+};
+
 const todo = (t) => `<span class="todo" title="To be filled in by the advocate">${t}</span>`;
 
 render({
@@ -503,7 +511,58 @@ render({
     <p>${todo('Names and enrolment details of associates, if they are to be listed.')}</p>
     <p><a class="btn btn-ink" href="${rel}contact.html"><span>Contact the office</span></a></p>
   </div>
+</div></section>
+<section class="section section-mist" aria-labelledby="opening-h"><div class="wrap split">
+  <div class="split-head">
+    <h2 id="opening-h">${esc(gallery.title)}</h2>
+    <p>Photos from the day the new office opened.</p>
+    <a class="text-link" href="${rel}gallery.html">See all ${gallery.photos.length} photos</a>
+  </div>
+  <ul class="gallery-strip">${gallery.photos
+    .slice(0, 3)
+    .map((p) => `<li><a href="${rel}gallery.html#photo-${p.n}">${photoPicture(rel, p, '(min-width: 800px) 22vw, 90vw')}</a></li>`)
+    .join('')}</ul>
 </div></section>`,
+});
+
+// ---------- gallery ----------
+
+render({
+  file: 'gallery.html',
+  title: `${gallery.title}: Photo Gallery`,
+  description: `Photos from the opening of the new office of ${site.firm}, behind the Family Court, Shivaji Nagar, Pune.`,
+  active: 'gallery.html',
+  priority: 0.5,
+  crumbs: [['Home', 'index.html'], ['Gallery', 'gallery.html']],
+  schema: [
+    {
+      '@type': 'ImageGallery',
+      name: gallery.title,
+      url: abs('gallery.html'),
+      about: { '@id': firmId },
+      image: gallery.photos.map((p) => ({ '@type': 'ImageObject', contentUrl: abs(`assets/img/office-opening/opening-${p.n}-1600.webp`), description: p.alt })),
+    },
+  ],
+  body: (rel) => `
+<section class="page-head"><div class="wrap">
+  ${crumbsHtml(rel, [['Home', 'index.html'], ['Gallery', 'gallery.html']])}
+  <h1>${esc(gallery.title)}</h1>
+  <p class="lede">${esc(gallery.intro)}</p>
+</div></section>
+<section class="section"><div class="wrap">
+  <ul class="gallery" data-gallery>${gallery.photos
+    .map(
+      (p) => `<li id="photo-${p.n}"><a href="${rel}assets/img/office-opening/opening-${p.n}-1600.webp" data-full>${photoPicture(rel, p, '(min-width: 1100px) 23rem, (min-width: 700px) 45vw, 92vw')}</a></li>`,
+    )
+    .join('')}</ul>
+</div></section>
+<dialog class="lightbox" aria-label="Photo viewer" data-lightbox>
+  <img alt="">
+  <p class="lightbox-caption"></p>
+  <form method="dialog"><button class="lightbox-close" aria-label="Close">&times;</button></form>
+  <button type="button" class="lightbox-nav lightbox-prev" aria-label="Previous photo" data-step="-1">&lsaquo;</button>
+  <button type="button" class="lightbox-nav lightbox-next" aria-label="Next photo" data-step="1">&rsaquo;</button>
+</dialog>`,
 });
 
 // ---------- contact ----------
@@ -642,6 +701,7 @@ ${posts.map((g) => `- [${g.title}](${abs(`legal-guides/${g.slug}.html`)}): ${g.s
 
 ## Pages
 - [About the advocate](${abs('about.html')})
+- [Office opening photos](${abs('gallery.html')})
 - [Contact and directions](${abs('contact.html')})
 - [Disclaimer](${abs('disclaimer.html')})
 `,
