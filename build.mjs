@@ -125,6 +125,7 @@ const firmSchema = () => ({
   areaServed: site.areaServed.map((name) => ({ '@type': 'City', name })),
   founder: { '@id': personId },
   knowsAbout: practice.map((p) => p.name),
+  ...(site.gbpUrl ? { hasMap: site.gbpUrl, sameAs: [site.gbpUrl] } : {}),
 });
 
 const personSchema = () => ({

@@ -40,9 +40,16 @@ export const site = {
   ],
   hoursSchema: ['Mo-Sa 10:30-19:00'],
 
-  mapsUrl:
+  // TODO: once the Google Business Profile is verified, paste its Google Maps
+  // link here (Maps > the profile > Share > Copy link). The "Get directions"
+  // buttons and the schema markup then point to the profile.
+  gbpUrl: '',
+  mapsSearchUrl:
     'https://www.google.com/maps/search/?api=1&query=' +
     encodeURIComponent('Supreme Tower, Old Tophkhana Line, Shivaji Nagar, Pune'),
+  get mapsUrl() {
+    return this.gbpUrl || this.mapsSearchUrl;
+  },
 
   areaServed: ['Pune', 'Pimpri-Chinchwad', 'Shivaji Nagar', 'Kothrud', 'Hadapsar', 'Wakad', 'Hinjawadi', 'Kharadi', 'Baner', 'Viman Nagar'],
 };
