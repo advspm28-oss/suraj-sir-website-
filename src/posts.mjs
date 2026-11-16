@@ -91,7 +91,7 @@ export const posts = [
   },
   {
     slug: 'cheque-bounce-section-138-deadlines',
-    title: 'Cheque bounce under Section 138: the deadlines that decide your case',
+    title: 'Section 138 cheque bounce: the deadlines that decide your case',
     description:
       'The four time limits in a cheque bounce case under Section 138 of the NI Act, where to file in Pune, and what happens after the complaint.',
     date: '2026-10-08',

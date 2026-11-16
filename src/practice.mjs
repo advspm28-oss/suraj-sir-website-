@@ -2,7 +2,9 @@
 // and its `guide` block feeds the "What is your matter about?" hero.
 // Legal content is general information and must be reviewed by the advocate.
 
-export const practice = [
+import { criminal } from './criminal.mjs';
+
+const others = [
   {
     slug: 'divorce-lawyer-pune',
     name: 'Divorce',
@@ -166,44 +168,6 @@ export const practice = [
     related: ['maintenance-alimony-lawyer-pune', 'criminal-lawyer-pune'],
   },
   {
-    slug: 'criminal-lawyer-pune',
-    name: 'Bail and criminal defence',
-    group: 'Criminal',
-    title: 'Criminal Lawyer in Pune: Bail and Anticipatory Bail',
-    description:
-      'Anticipatory bail, regular bail, FIR quashing and criminal trials in Pune under the BNS, BNSS and BSA.',
-    h1: 'Bail and criminal defence in Pune',
-    short: 'Anticipatory and regular bail, FIR quashing, and defence at trial.',
-    guide: {
-      label: 'Bail or FIR',
-      court: 'Sessions Court, Pune, at Shivaji Nagar, or the Bombay High Court.',
-      first:
-        'If arrest is feared, an application for anticipatory bail is filed. If someone is already in custody, a regular bail application is filed before the Magistrate or Sessions Court.',
-      docs: ['Copy of the FIR or complaint, if available', 'Any notice received from the police', 'Identity and address proof', 'Documents supporting your version of events'],
-    },
-    body: `
-<h2>The new criminal laws</h2>
-<p>Since 1 July 2024, criminal cases are governed by the Bharatiya Nyaya Sanhita (which replaced the Indian Penal Code), the Bharatiya Nagarik Suraksha Sanhita (which replaced the Code of Criminal Procedure) and the Bharatiya Sakshya Adhiniyam (which replaced the Indian Evidence Act). Offences committed before that date continue under the old laws.</p>
-
-<h2>Anticipatory bail</h2>
-<p>If you fear arrest in a non-bailable offence, you can apply for anticipatory bail under Section 482 of the BNSS (earlier Section 438 CrPC) to the Sessions Court or the High Court. If it is granted, you are released on bail if arrested, usually on conditions such as joining the investigation.</p>
-
-<h2>Regular bail</h2>
-<p>A person already in custody can apply for regular bail under Sections 480 and 483 of the BNSS. The court considers the nature of the offence, the evidence, the risk of the accused fleeing or tampering with evidence, and the time already spent in custody.</p>
-
-<h2>Quashing of FIRs</h2>
-<p>The High Court can quash an FIR or criminal proceedings under its inherent powers, now in Section 528 of the BNSS (earlier Section 482 CrPC), for example where the allegations do not disclose an offence or where the parties have settled a matrimonial dispute.</p>
-
-<h2>How we help</h2>
-<p>Criminal matters move quickly in the first days. We advise on your rights when the police issue a notice, prepare and argue bail applications, and defend the case at trial.</p>`,
-    faqs: [
-      { q: 'Should I apply for anticipatory bail before the FIR is registered?', a: 'You can apply when you have a reasonable belief that you may be arrested, even before an FIR. The application must show specific facts behind that belief.' },
-      { q: 'Is a cruelty case under Section 85 BNS bailable?', a: 'Cruelty by a husband or relatives under Section 85 BNS is non-bailable. Anticipatory bail is commonly sought in such matters.' },
-      { q: 'Can a matrimonial criminal case be closed after settlement?', a: 'Where the dispute is essentially private and the parties have genuinely settled, the High Court can quash the proceedings.' },
-    ],
-    related: ['domestic-violence-lawyer-pune', 'cheque-bounce-lawyer-pune'],
-  },
-  {
     slug: 'cheque-bounce-lawyer-pune',
     name: 'Cheque bounce',
     group: 'Criminal',
@@ -286,3 +250,7 @@ export const practice = [
     related: ['cheque-bounce-lawyer-pune', 'divorce-lawyer-pune'],
   },
 ];
+
+// Criminal defence first (the primary practice), then cheque bounce, family and civil.
+const order = ['Criminal', 'Family', 'Civil'];
+export const practice = [...criminal, ...others].sort((a, b) => order.indexOf(a.group) - order.indexOf(b.group));

@@ -3,8 +3,12 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { site, fullAddress, waLink } from './src/site.mjs';
 import { practice } from './src/practice.mjs';
-import { posts } from './src/posts.mjs';
+import { posts as familyPosts } from './src/posts.mjs';
+import { criminalPosts } from './src/criminal-posts.mjs';
+import { situations, bailPeriods } from './src/situations.mjs';
 import { gallery } from './src/gallery.mjs';
+
+const posts = [...criminalPosts, ...familyPosts].sort((a, b) => b.date.localeCompare(a.date));
 
 const OUT = 'dist';
 const BUILT = new Date().toISOString().slice(0, 10);
@@ -220,71 +224,128 @@ const guideRows = (rel, list) =>
 
 // ---------- home ----------
 
+const statutes = [
+  ['482', 'Section 482 BNSS', 'Anticipatory bail'],
+  ['187(3)', 'Section 187(3) BNSS', 'Default bail'],
+  ['21(4)', 'Section 21(4) MCOCA', 'Bail in organised crime cases'],
+  ['18', 'Section 18, SC/ST Act', 'The anticipatory bail bar'],
+  ['37', 'Section 37, NDPS Act', 'Bail in commercial quantity cases'],
+  ['29', 'Section 29, POCSO Act', 'The presumption of guilt'],
+  ['3', 'Section 3, MPID Act', 'Fraudulent default by deposit schemes'],
+];
+const tickerItems = practice.filter((p) => p.group === 'Criminal' && !p.hub);
+const criminalCore = practice.filter((p) => p.group === 'Criminal' && !p.special);
+const specialActs = practice.filter((p) => p.special);
+const otherAreas = practice.filter((p) => p.group !== 'Criminal');
+
 render({
   file: 'index.html',
-  title: `Advocates in Pune | ${site.shortName}`,
-  description: 'Advocates behind the Family Court, Shivaji Nagar, Pune, for divorce, custody, maintenance, domestic violence, bail, cheque bounce and property cases.',
+  title: `Criminal Defence Advocates, Pune | ${site.shortName}`,
+  description: 'Criminal defence advocates in Shivaji Nagar, Pune: anticipatory bail, regular and default bail, and cases under the MPID, POCSO, SC/ST, MCOCA and NDPS Acts.',
   priority: 1.0,
   schema: [firmSchema(), personSchema(), { '@type': 'WebSite', '@id': `${site.url}/#website`, url: abs('index.html'), name: site.firm, inLanguage: site.lang, publisher: { '@id': firmId } }],
   body: (rel) => `
-<section class="hero" aria-labelledby="hero-h">
+<section class="hero" aria-labelledby="hero-h" data-hero>
+  <div class="hero-light" aria-hidden="true"></div>
   <div class="wrap hero-grid">
     <div class="hero-copy">
-<p class="hero-firm">${esc(site.firm)}</p>
-      <h1 id="hero-h">Advocates in Pune for family, criminal and property matters</h1>
-      <p class="hero-lede">Our office is right behind the Family Court in Shivaji Nagar. Tell us what your matter is about and we'll explain what happens next.</p>
+      <p class="hero-kicker">Criminal defence advocates, Shivaji Nagar, Pune</p>
+      <h1 id="hero-h"><span class="hl">Arrested, summoned</span> <span class="hl">or named in an FIR?</span></h1>
+      <p class="hero-lede">We defend criminal cases in Pune from the first police notice to the final hearing, including bail under the MPID, POCSO, SC/ST, MCOCA and NDPS Acts.</p>
       <div class="hero-actions">
-        <a class="btn btn-band" href="tel:${site.phone}">${icon.phone}<span>Call ${esc(site.phoneDisplay)}</span></a>
-        <a class="btn btn-ghost" href="${waLink('Hello, I would like to ask about a legal matter.')}">${icon.whatsapp}<span>WhatsApp ${esc(site.whatsappDisplay)}</span></a>
+        <a class="btn btn-band btn-lg" href="tel:${site.phone}">${icon.phone}<span>Call<span class="hide-sm"> ${esc(site.phoneDisplay)}</span></span></a>
+        <a class="btn btn-ghost btn-lg" href="${waLink('Hello, I would like advice about a criminal case.')}">${icon.whatsapp}<span>WhatsApp</span></a>
       </div>
+      <p class="hero-note">${icon.pin}<span>Behind the Family Court, Shivaji Nagar. ${esc(site.hours[0].days)}, ${esc(site.hours[0].label)}.</span></p>
     </div>
-    <figure class="hero-portrait">
-      <picture>
-        <source type="image/webp" srcset="${rel}assets/img/advocate-portrait-480.webp 480w, ${rel}assets/img/advocate-portrait-800.webp 800w" sizes="(min-width: 960px) 34vw, 80vw">
-        <img src="${rel}assets/img/advocate-portrait-800.jpg" width="800" height="1000" alt="${esc(site.advocate)} in advocate's robes and bands" fetchpriority="high">
-      </picture>
-      <figcaption>${esc(site.advocate)}<span>Advocate, Pune</span></figcaption>
+    <figure class="hero-stage">
+      <div class="statute" data-statutes='${esc(JSON.stringify(statutes))}' aria-hidden="true">
+        <span class="statute-num" data-len="3">482</span>
+      </div>
+      <img class="hero-figure" src="${rel}assets/img/advocate-cutout-900.webp" srcset="${rel}assets/img/advocate-cutout-560.webp 560w, ${rel}assets/img/advocate-cutout-900.webp 900w" sizes="(min-width: 960px) 40vw, 80vw" width="900" height="879" alt="${esc(site.advocate)} in advocate's robes and bands" fetchpriority="high">
+      <figcaption>
+        <span class="statute-caption" aria-hidden="true"><strong data-statute-sec>Section 482 BNSS</strong> <span data-statute-label>Anticipatory bail</span></span>
+        <span class="hero-name">${esc(site.advocate)}<span>Advocate, Pune</span></span>
+      </figcaption>
     </figure>
   </div>
-  <div class="wrap">
-      <div class="matter" data-matter>
-        <h2 class="matter-q" id="matter-q">What is your matter about?</h2>
-        <div class="matter-tabs" role="tablist" aria-labelledby="matter-q">
-          ${practice
-            .map((p, i) => `<button type="button" role="tab" id="tab-${p.slug}" aria-controls="panel-${p.slug}" aria-selected="${i === 0}" tabindex="${i === 0 ? 0 : -1}">${esc(p.guide.label)}</button>`)
-            .join('')}
-        </div>
-        ${practice
-          .map(
-            (p, i) => `<div class="matter-panel" role="tabpanel" id="panel-${p.slug}" aria-labelledby="tab-${p.slug}"${i === 0 ? '' : ' hidden'}>
-          <dl>
-            <div><dt>Where it's heard</dt><dd>${esc(p.guide.court)}</dd></div>
-            <div><dt>What usually happens first</dt><dd>${esc(p.guide.first)}</dd></div>
-            <div class="matter-docs"><dt>Bring these to the first meeting</dt><dd><ul>${p.guide.docs.map((d) => `<li>${esc(d)}</li>`).join('')}</ul></dd></div>
-          </dl>
-          <div class="matter-actions">
-            <a class="btn btn-band" href="${waLink(`Hello, I would like advice about a ${p.guide.label.toLowerCase()} matter.`)}">${icon.whatsapp}<span>Ask about ${esc(p.guide.label.toLowerCase())} on WhatsApp</span></a>
-            <a class="text-link" href="${rel}${p.slug}.html">Read about ${esc(p.name.toLowerCase())} cases</a>
-          </div>
-        </div>`,
-          )
-          .join('')}
+  <nav class="ticker" aria-label="Criminal practice areas">
+    <div class="ticker-track">
+      <ul>${tickerItems.map((p) => `<li><a href="${rel}${p.slug}.html">${esc(p.name)}</a></li>`).join('')}</ul>
+      <ul aria-hidden="true">${tickerItems.map((p) => `<li><a href="${rel}${p.slug}.html" tabindex="-1">${esc(p.name)}</a></li>`).join('')}</ul>
+    </div>
+  </nav>
+</section>
+
+<section class="section situ" aria-labelledby="situ-h">
+  <div class="wrap situ-grid" data-tabs>
+    <div class="situ-head">
+      <h2 id="situ-h">What's happening right now?</h2>
+      <p>Choose the closest situation to see what to do first.</p>
+      <div class="situ-tabs" role="tablist" aria-labelledby="situ-h" aria-orientation="vertical">
+        ${situations.map((s, i) => `<button type="button" role="tab" id="tab-${s.id}" aria-controls="panel-${s.id}" aria-selected="${i === 0}" tabindex="${i === 0 ? 0 : -1}">${esc(s.label)}</button>`).join('')}
       </div>
+    </div>
+    ${situations
+      .map(
+        (s, i) => `<div class="situ-panel" role="tabpanel" id="panel-${s.id}" aria-labelledby="tab-${s.id}"${i === 0 ? '' : ' hidden'}>
+      <h3>Do this now</h3>
+      <ol class="situ-steps">${s.now.map((n) => `<li>${esc(n)}</li>`).join('')}</ol>
+      <h3>The law</h3>
+      <p>${esc(s.law)}</p>
+      <div class="situ-actions">
+        <a class="btn btn-band" href="${waLink(s.wa)}">${icon.whatsapp}<span>Ask on WhatsApp</span></a>
+        <a class="text-link" href="${rel}${s.link[0]}">${esc(s.link[1])}</a>
+      </div>
+    </div>`,
+      )
+      .join('')}
+  </div>
+</section>
+
+<section class="section section-mist" id="default-bail" aria-labelledby="calc-h">
+  <div class="wrap calc">
+    <div class="calc-copy">
+      <h2 id="calc-h">Count the days to default bail</h2>
+      <p>If the police don't file a chargesheet in time, the accused can claim default bail, but only by applying before the chargesheet is filed. Enter the date of the first remand to see the deadline.</p>
+      <p class="small">Counted with the remand date as day one, as held in <em>Enforcement Directorate v. Kapil Wadhawan</em> (2023). Extensions, the exact sections and changes in custody can move the date, so confirm it with your advocate. <a href="${rel}legal-guides/default-bail-section-187-bnss.html">How default bail works</a></p>
+    </div>
+    <form class="calc-card" data-calc novalidate>
+      <label for="calc-date">Date of first remand</label>
+      <input type="date" id="calc-date" name="date" required>
+      <label for="calc-type">Type of offence</label>
+      <select id="calc-type" name="type">
+        ${bailPeriods.map((b) => `<option value="${b.days}" data-note="${esc(b.note)}">${esc(b.label)}</option>`).join('')}
+      </select>
+      <output class="calc-out" for="calc-date calc-type" aria-live="polite">
+        <span class="calc-row"><span>Chargesheet due by</span><strong data-out="due">Choose a date</strong></span>
+        <span class="calc-row"><span>Default bail can be claimed from</span><strong data-out="claim">&nbsp;</strong></span>
+        <span class="calc-bar" aria-hidden="true"><span class="calc-fill" data-out="fill"></span></span>
+        <span class="calc-status" data-out="status"></span>
+        <span class="calc-note" data-out="note"></span>
+      </output>
+      <a class="btn btn-ink" data-out="wa" href="${waLink('Hello, I would like advice on default bail.')}">${icon.whatsapp}<span>Ask about default bail</span></a>
+    </form>
   </div>
 </section>
 
 <section class="section" aria-labelledby="areas-h">
-  <div class="wrap split">
-    <div class="split-head">
-      <h2 id="areas-h">Practice areas</h2>
-      <p>Most of our work is at the Family Court, the District and Sessions Court and the Civil Court, all in Shivaji Nagar.</p>
-      <a class="text-link" href="${rel}practice-areas.html">All practice areas</a>
+  <div class="wrap">
+    <div class="areas-head">
+      <h2 id="areas-h">Criminal defence</h2>
+      <p>Our main practice, before the Magistrate courts, the Sessions Court and the special courts at Shivaji Nagar, and the Bombay High Court.</p>
     </div>
-    <ul class="area-list">
-      ${practice
-        .map((p) => `<li><a href="${rel}${p.slug}.html"><span class="area-name">${esc(p.name)}</span><span class="area-short">${esc(p.short)}</span></a></li>`)
-        .join('')}
-    </ul>
+    <div class="areas-grid">
+      <div>
+        <h3 class="areas-sub">Bail and defence</h3>
+        <ul class="area-list">${criminalCore.map((p) => `<li><a href="${rel}${p.slug}.html"><span class="area-name">${esc(p.name)}</span><span class="area-short">${esc(p.short)}</span></a></li>`).join('')}</ul>
+      </div>
+      <div>
+        <h3 class="areas-sub">Special Acts</h3>
+        <ul class="area-list">${specialActs.map((p) => `<li><a href="${rel}${p.slug}.html"><span class="area-name">${esc(p.name)}</span><span class="area-short">${esc(p.short)}</span></a></li>`).join('')}</ul>
+      </div>
+    </div>
+    <p class="areas-also">We also handle family and civil matters: ${otherAreas.map((p) => `<a href="${rel}${p.slug}.html">${esc(p.name.toLowerCase())}</a>`).join(', ')}.</p>
   </div>
 </section>
 
@@ -292,8 +353,8 @@ render({
   <div class="wrap">
     <h2 id="steps-h">How a first consultation works</h2>
     <ol class="steps">
-      <li><h3>Call or message the office</h3><p>Tell us briefly what the matter is about, and we'll fix a time to meet. Please don't send confidential documents over WhatsApp before we've spoken.</p></li>
-      <li><h3>Meet with your papers</h3><p>Bring copies of the documents you have. Our <a href="${rel}legal-guides/first-meeting-family-lawyer-checklist.html">first meeting checklist</a> lists what helps.</p></li>
+      <li><h3>Call or message the office</h3><p>Tell us briefly what has happened and we'll fix a time to meet. In urgent arrest matters, call rather than message. Please don't send confidential documents over WhatsApp before we've spoken.</p></li>
+      <li><h3>Meet with your papers</h3><p>Bring the FIR, any police notice or remand order, and documents that support your version.</p></li>
       <li><h3>Understand your options</h3><p>We explain where the case stands, what the law allows, the likely timeline, and our fees, before you decide anything.</p></li>
     </ol>
   </div>
@@ -303,10 +364,10 @@ render({
   <div class="wrap split">
     <div class="split-head">
       <h2 id="guides-h">Legal guides</h2>
-      <p>Plain explanations of the questions we're asked most often.</p>
+      <p>Plain explanations of the criminal law questions we're asked most often.</p>
       <a class="text-link" href="${rel}legal-guides.html">All guides</a>
     </div>
-    ${guideRows(rel, posts.slice(0, 3))}
+    ${guideRows(rel, posts.slice(0, 4))}
   </div>
 </section>
 
@@ -331,8 +392,8 @@ render({
 
 render({
   file: 'practice-areas.html',
-  title: 'Practice Areas: Family, Criminal and Civil Law',
-  description: 'Family, criminal and civil practice areas of our Pune office: divorce, custody, maintenance, domestic violence, bail, cheque bounce and property.',
+  title: 'Practice Areas: Criminal Defence, Family and Civil Law',
+  description: 'Criminal defence, special Acts, family and civil matters handled by our Pune office: bail, MPID, POCSO, SC/ST, MCOCA, NDPS, divorce and property.',
   active: 'practice-areas.html',
   priority: 0.9,
   crumbs: [['Home', 'index.html'], ['Practice areas', 'practice-areas.html']],
@@ -340,13 +401,13 @@ render({
 <section class="page-head"><div class="wrap">
   ${crumbsHtml(rel, [['Home', 'index.html'], ['Practice areas', 'practice-areas.html']])}
   <h1>Practice areas</h1>
-  <p class="lede">We handle family, criminal and civil matters, mostly before the courts in Shivaji Nagar, Pune.</p>
+  <p class="lede">Criminal defence is our main practice. We also handle family and civil matters, mostly before the courts in Shivaji Nagar, Pune.</p>
 </div></section>
 <section class="section"><div class="wrap">
-  ${['Family', 'Criminal', 'Civil']
+  ${['Criminal', 'Special', 'Family', 'Civil']
     .map(
-      (g) => `<div class="area-group-block"><h2>${g === 'Family' ? 'Family law' : g === 'Criminal' ? 'Criminal law' : 'Civil and property law'}</h2><ul class="area-list">${practice
-        .filter((p) => p.group === g)
+      (g) => `<div class="area-group-block"><h2>${{ Criminal: 'Criminal defence', Special: 'Special Acts', Family: 'Family law', Civil: 'Civil and property law' }[g]}</h2><ul class="area-list">${practice
+        .filter((p) => (g === 'Special' ? p.special : g === 'Criminal' ? p.group === g && !p.special : p.group === g))
         .map((p) => `<li><a href="${rel}${p.slug}.html"><span class="area-name">${esc(p.name)}</span><span class="area-short">${esc(p.short)}</span></a></li>`)
         .join('')}</ul></div>`,
     )
