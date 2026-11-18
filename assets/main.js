@@ -161,6 +161,22 @@
     update();
   });
 
+  // Home page question box: carry the question over to the Ask page, even where
+  // the query string is dropped.
+  document.querySelectorAll('[data-ask-home]').forEach((f) => {
+    f.addEventListener('submit', () => {
+      try { sessionStorage.setItem('ask-q', f.querySelector('input').value); } catch (e) {}
+    });
+  });
+
+  // Links to a common question (#faq-2) open that answer.
+  const openHash = () => {
+    const el = location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
+    if (el && el.tagName === 'DETAILS') el.open = true;
+  };
+  openHash();
+  window.addEventListener('hashchange', openHash);
+
   // Enquiry form: compose one WhatsApp message from the fields.
   document.querySelectorAll('[data-enquiry]').forEach((form) => {
     form.addEventListener('submit', (e) => {

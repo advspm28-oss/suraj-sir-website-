@@ -39,6 +39,7 @@ const nav = [
   ['about.html', 'About'],
   ['gallery.html', 'Gallery'],
   ['legal-guides.html', 'Legal guides'],
+  ['ask.html', 'Ask a question'],
   ['contact.html', 'Contact'],
 ];
 
@@ -157,7 +158,7 @@ const crumbsHtml = (rel, crumbs) =>
 
 // ---------- page shell ----------
 
-function render({ file, title, description, body, active, schema = [], crumbs, ogType = 'website', priority = 0.7, noindex = false }) {
+function render({ file, title, description, body, active, schema = [], crumbs, ogType = 'website', priority = 0.7, noindex = false, scripts = [] }) {
   const rel = '../'.repeat(file.split('/').length - 1);
   const graph = [...schema];
   if (crumbs) graph.push(crumbsSchema(crumbs));
@@ -192,7 +193,7 @@ ${header(rel, active)}
 ${body(rel)}
 </main>
 ${footer(rel)}
-<script src="${rel}assets/main.js" defer></script>
+<script src="${rel}assets/main.js" defer></script>${scripts.map((js) => `\n<script src="${rel}assets/${js}" defer></script>`).join('')}
 </body>
 </html>
 `;
@@ -212,8 +213,44 @@ const contactAside = (rel, label) => `<aside class="aside-card">
 
 const faqHtml = (faqs) =>
   `<section class="faq" aria-labelledby="faq-h"><h2 id="faq-h">Common questions</h2>${faqs
-    .map((f) => `<details><summary>${esc(f.q)}</summary><p>${esc(f.a)}</p></details>`)
+    .map((f, i) => `<details id="faq-${i + 1}"><summary>${esc(f.q)}</summary><p>${esc(f.a)}</p></details>`)
     .join('')}</section>`;
+
+// Search index for the "Ask a question" page: every section and FAQ, with a link to its anchor.
+const searchDocs = [];
+const plain = (html) =>
+  html.replace(/<[^>]+>/g, ' ').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/\s+/g, ' ').trim();
+const slugify = (t) => plain(t).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+function sectionize(html) {
+  const sections = [];
+  const seen = new Set();
+  let intro = '';
+  let current = null;
+  const out = html
+    .split(/(<h2>[\s\S]*?<\/h2>)/)
+    .map((part) => {
+      const m = part.match(/^<h2>([\s\S]*?)<\/h2>$/);
+      if (!m) {
+        if (current) current.text += ' ' + plain(part);
+        else intro += ' ' + plain(part);
+        return part;
+      }
+      let id = slugify(m[1]);
+      while (seen.has(id)) id += '-2';
+      seen.add(id);
+      current = { id, heading: plain(m[1]), text: '' };
+      sections.push(current);
+      return `<h2 id="${id}">${m[1]}</h2>`;
+    })
+    .join('');
+  sections.forEach((x) => (x.text = x.text.trim()));
+  return { html: out, intro: intro.trim(), sections };
+}
+const addDocs = (url, page, kind, sec, extra = []) => {
+  if (sec.intro) searchDocs.push({ u: url, p: page, h: page, t: sec.intro, k: kind });
+  sec.sections.forEach((x) => x.text && searchDocs.push({ u: `${url}#${x.id}`, p: page, h: x.heading, t: x.text, k: kind }));
+  extra.forEach((d) => searchDocs.push({ p: page, k: kind, ...d }));
+};
 
 const guideRows = (rel, list) =>
   `<ul class="guide-list">${list
@@ -300,6 +337,20 @@ render({
     </div>`,
       )
       .join('')}
+  </div>
+</section>
+
+<section class="section ask-band" aria-labelledby="askband-h">
+  <div class="wrap split">
+    <div class="split-head">
+      <h2 id="askband-h">Ask your own question</h2>
+      <p>Search every practice page and guide we've written. Answers link to where they come from.</p>
+    </div>
+    <form class="ask-form ask-form-light" role="search" action="${rel}ask.html" method="get" data-ask-home>
+      <label class="sr-only" for="home-q">Your question</label>
+      <input id="home-q" name="q" type="search" placeholder="For example: is anticipatory bail barred under MCOCA?" autocomplete="off" enterkeyhint="search" maxlength="300">
+      <button class="btn btn-ink btn-lg" type="submit">Search</button>
+    </form>
   </div>
 </section>
 
@@ -418,6 +469,12 @@ render({
 // ---------- practice pages ----------
 
 for (const p of practice) {
+  const sec = sectionize(p.body);
+  addDocs(`${p.slug}.html`, p.h1, 'Practice area', sec, [
+    { u: `${p.slug}.html`, h: 'At a glance', t: `Where it's heard: ${p.guide.court} What usually happens first: ${p.guide.first}` },
+    { u: `${p.slug}.html#documents-to-bring`, h: 'Documents to bring', t: p.guide.docs.join('. ') + '.' },
+    ...p.faqs.map((f, i) => ({ u: `${p.slug}.html#faq-${i + 1}`, h: f.q, t: f.a, k: 'Question' })),
+  ]);
   const crumbs = [['Home', 'index.html'], ['Practice areas', 'practice-areas.html'], [p.name, `${p.slug}.html`]];
   const related = p.related.map((s) => byPracticeSlug[s]);
   const guides = posts.filter((g) => g.practice === p.slug);
@@ -446,8 +503,8 @@ for (const p of practice) {
         <div><dt>What usually happens first</dt><dd>${esc(p.guide.first)}</dd></div>
       </dl>
     </div>
-    ${p.body}
-    <h2>Documents to bring</h2>
+    ${sec.html}
+    <h2 id="documents-to-bring">Documents to bring</h2>
     <ul>${p.guide.docs.map((d) => `<li>${esc(d)}</li>`).join('')}</ul>
     ${faqHtml(p.faqs)}
     ${guides.length ? `<h2>Related guides</h2>${guideRows(rel, guides)}` : ''}
@@ -482,6 +539,8 @@ render({
 
 for (const g of posts) {
   const area = byPracticeSlug[g.practice];
+  const sec = sectionize(g.body);
+  addDocs(`legal-guides/${g.slug}.html`, g.title, 'Guide', sec);
   const crumbs = [['Home', 'index.html'], ['Legal guides', 'legal-guides.html'], [g.title, `legal-guides/${g.slug}.html`]];
   render({
     file: `legal-guides/${g.slug}.html`,
@@ -514,7 +573,7 @@ for (const g of posts) {
 </div></section>
 <div class="wrap with-aside">
   <article class="prose">
-    ${g.body}
+    ${sec.html}
     <p class="small-print">This guide is general information about the law as it stood on the date above. It is not legal advice. Please speak to an advocate about your own situation.</p>
   </article>
   <div class="aside-col">
@@ -723,9 +782,72 @@ render({
 <p class="lede">It may have moved. Try the <a href="${rel}practice-areas.html">practice areas</a>, the <a href="${rel}legal-guides.html">legal guides</a>, or <a href="${rel}contact.html">contact the office</a>.</p></div></section>`,
 });
 
+// ---------- ask a question ----------
+
+const askSuggestions = [
+  'Can I get anticipatory bail in an SC/ST Act case?',
+  'What is default bail?',
+  'Is bail possible in a POCSO case?',
+  'Police sent me a notice. What should I do?',
+  'Who can be prosecuted under the MPID Act?',
+  'Can a 498A case be quashed after settlement?',
+];
+const commonQuestions = practice.filter((p) => p.group === 'Criminal').flatMap((p) => p.faqs.slice(0, 1).map((f) => f.q));
+
+render({
+  file: 'ask.html',
+  title: 'Ask a Legal Question: Answers From Our Guides',
+  description: 'Search our practice pages and legal guides on bail, MPID, POCSO, SC/ST, MCOCA, NDPS, 498A and more. Answers link to the page they come from.',
+  active: 'ask.html',
+  priority: 0.8,
+  crumbs: [['Home', 'index.html'], ['Ask a question', 'ask.html']],
+  scripts: ['ask.js'],
+  body: (rel) => `
+<section class="ask-hero">
+  <div class="wrap">
+    ${crumbsHtml(rel, [['Home', 'index.html'], ['Ask a question', 'ask.html']])}
+    <h1>Ask a legal question</h1>
+    <p class="lede">Type your question in English, Hindi or Marathi. Answers come from our own practice pages and guides, not from AI, with a link to the exact section each answer comes from.</p>
+    <form class="ask-form" role="search" action="${rel}ask.html" method="get" data-ask>
+      <label class="sr-only" for="ask-q">Your question</label>
+      <input id="ask-q" name="q" type="search" placeholder="For example: can I get bail in an NDPS case?" autocomplete="off" enterkeyhint="search" maxlength="300">
+      <button class="btn btn-band btn-lg" type="submit">Search</button>
+    </form>
+    <div class="ask-suggest">
+      <span>Try</span>
+      ${askSuggestions.map((q) => `<button type="button" data-q="${esc(q)}">${esc(q)}</button>`).join('')}
+    </div>
+  </div>
+</section>
+<section class="section"><div class="wrap ask-layout">
+  <div class="ask-results" data-results aria-live="polite">
+    <h2 class="ask-h">Questions people ask</h2>
+    <ul class="ask-common">${commonQuestions.map((q) => `<li><button type="button" data-q="${esc(q)}">${esc(q)}</button></li>`).join('')}</ul>
+  </div>
+  <aside class="ask-aside">
+    <div class="aside-card">
+      <h2>Still unsure?</h2>
+      <p>Every case turns on its facts. Send your question to the office and we'll tell you how it applies to you.</p>
+      <a class="btn btn-ink" data-ask-wa href="${waLink('Hello, I have a legal question.')}">${icon.whatsapp}<span>Ask on WhatsApp</span></a>
+      <a class="btn btn-line" href="tel:${site.phone}">${icon.phone}<span>Call ${esc(site.phoneDisplay)}</span></a>
+    </div>
+    <nav class="aside-related" aria-label="Tools">
+      <h2>Tools</h2>
+      <ul>
+        <li><a href="${rel}index.html#default-bail">Default bail date calculator</a></li>
+        <li><a href="${rel}legal-guides.html">All legal guides</a></li>
+        <li><a href="${rel}practice-areas.html">All practice areas</a></li>
+      </ul>
+    </nav>
+    <p class="small">Answers are general information from our published pages, not legal advice, and searching does not create an advocate–client relationship. Your question stays in your browser and is not sent to us unless you choose to send it.</p>
+  </aside>
+</div></section>`,
+});
+
 // ---------- assets, sitemap, robots, llms.txt ----------
 
 fs.cpSync('assets', path.join(OUT, 'assets'), { recursive: true });
+fs.writeFileSync(path.join(OUT, 'assets', 'search-index.json'), JSON.stringify({ built: BUILT, docs: searchDocs }));
 
 fs.writeFileSync(
   path.join(OUT, 'sitemap.xml'),
@@ -763,6 +885,7 @@ ${posts.map((g) => `- [${g.title}](${abs(`legal-guides/${g.slug}.html`)}): ${g.s
 ## Pages
 - [About the advocate](${abs('about.html')})
 - [Office opening photos](${abs('gallery.html')})
+- [Ask a legal question](${abs('ask.html')}): search our guides and practice pages
 - [Contact and directions](${abs('contact.html')})
 - [Disclaimer](${abs('disclaimer.html')})
 `,

@@ -118,6 +118,8 @@ export const criminal = [
 <h2>Common situations</h2>
 <p>Anticipatory bail is most often sought in matrimonial cruelty cases under <a href="498a-dowry-case-lawyer-pune.html">Section 85 BNS (earlier 498A IPC)</a>, cheating and breach of trust complaints arising from business disputes, property disputes turned criminal, and cases where several family members are named in one FIR.</p>`,
     faqs: [
+      { q: 'What is anticipatory bail?', a: 'An order of the Sessions Court or High Court that if you are arrested in a non-bailable offence, you will be released on bail. It is applied for before arrest, under Section 482 BNSS.' },
+      { q: 'Is Section 438 CrPC still used for anticipatory bail?', a: 'From 1 July 2024, anticipatory bail is governed by Section 482 of the BNSS, which replaced Section 438 of the CrPC. The remedy is largely the same. Which provision an application is filed under depends on when the proceedings began.' },
       { q: 'How long does anticipatory bail take in Pune?', a: 'Interim protection can be granted on the first day of hearing. The final decision usually follows once the police file their reply, often within a few weeks.' },
       { q: 'Do I need to go to the police after getting anticipatory bail?', a: 'Usually yes. Most orders require you to join the investigation when called. If you are formally arrested, you are released on the bail granted.' },
       { q: 'Can anticipatory bail be cancelled?', a: 'Yes, if you breach its conditions, for example by not cooperating with the investigation or by contacting witnesses.' },
@@ -169,6 +171,7 @@ export const criminal = [
 <h2>After bail is granted</h2>
 <p>Release needs a bail bond and, usually, one or more sureties with proof of identity, address and solvency. Courts can attach conditions such as reporting to the police station, surrendering a passport or staying away from witnesses. A breach can lead to cancellation of bail.</p>`,
     faqs: [
+      { q: 'What is default bail?', a: 'The right of an accused in custody to be released on bail if the police do not file a chargesheet within the time allowed: 60 or 90 days under Section 187(3) BNSS, or longer under some special Acts. It must be claimed by applying before the chargesheet is filed.' },
       { q: 'Who can stand surety in Pune?', a: 'Usually a relative or acquaintance with proof of identity and address, and, where the court requires, proof of property or income. The court verifies the surety before release.' },
       { q: 'What if bail is refused by the Magistrate?', a: 'A fresh bail application can be filed before the Sessions Court, and after that before the Bombay High Court.' },
       { q: 'When does the 60 or 90-day period for default bail start?', a: 'From the date the Magistrate first remands the accused to custody, and that day is counted, as the Supreme Court held in Enforcement Directorate v. Kapil Wadhawan (2023).' },
