@@ -7,6 +7,7 @@ import { posts as familyPosts } from './src/posts.mjs';
 import { criminalPosts } from './src/criminal-posts.mjs';
 import { situations, bailPeriods } from './src/situations.mjs';
 import { gallery } from './src/gallery.mjs';
+import { team } from './src/team.mjs';
 
 const posts = [...criminalPosts, ...familyPosts].sort((a, b) => b.date.localeCompare(a.date));
 
@@ -37,7 +38,7 @@ const icon = {
 const nav = [
   ['practice-areas.html', 'Practice areas'],
   ['about.html', 'About'],
-  ['gallery.html', 'Gallery'],
+  ['team.html', 'Team'],
   ['legal-guides.html', 'Legal guides'],
   ['ask.html', 'Ask a question'],
   ['contact.html', 'Contact'],
@@ -78,6 +79,7 @@ function footer(rel) {
       <h2 class="footer-h">The practice</h2>
       <ul class="footer-links">
         <li><a href="${rel}about.html">About the advocate</a></li>
+        <li><a href="${rel}team.html">Our team</a></li>
         <li><a href="${rel}gallery.html">Office opening photos</a></li>
         <li><a href="${rel}legal-guides.html">Legal guides</a></li>
         <li><a href="${rel}contact.html">Contact and directions</a></li>
@@ -685,6 +687,60 @@ render({
 </dialog>`,
 });
 
+// ---------- team ----------
+
+const teamPicture = (rel, m, sizes, eager = false) =>
+  `<picture><source type="image/webp" srcset="${rel}assets/img/team/${m.slug}-480.webp 480w, ${rel}assets/img/team/${m.slug}-800.webp 800w" sizes="${sizes}"><img src="${rel}assets/img/team/${m.slug}-800.jpg" width="800" height="1000" alt="${esc(m.name)}"${eager ? '' : ' loading="lazy"'}></picture>`;
+const members = team.filter((m) => !m.draft);
+const teamLead = members.find((m) => m.lead);
+const associates = members.filter((m) => !m.lead);
+
+render({
+  file: 'team.html',
+  title: 'Our Team: Advocates in Shivaji Nagar, Pune',
+  description: `The advocates of ${site.firm}, criminal defence advocates in Shivaji Nagar, Pune.`,
+  active: 'team.html',
+  priority: 0.8,
+  crumbs: [['Home', 'index.html'], ['Our team', 'team.html']],
+  schema: members.map((m) => ({
+    '@type': 'Person',
+    ...(m.lead ? { '@id': personId } : {}),
+    name: m.name,
+    jobTitle: m.role,
+    image: abs(`assets/img/team/${m.slug}-800.jpg`),
+    worksFor: { '@id': firmId },
+    knowsAbout: m.areas,
+    url: abs(`team.html#${m.slug}`),
+  })),
+  body: (rel) => `
+<section class="page-head"><div class="wrap">
+  ${crumbsHtml(rel, [['Home', 'index.html'], ['Our team', 'team.html']])}
+  <h1>Our team</h1>
+  <p class="lede">The advocates who handle your matter, in court and in the office behind the Family Court, Shivaji Nagar.</p>
+</div></section>
+${teamLead ? `<section class="section"><div class="wrap team-lead" id="${teamLead.slug}">
+  <figure class="team-photo">${teamPicture(rel, teamLead, '(min-width: 860px) 30vw, 90vw', true)}</figure>
+  <div class="team-text">
+    <p class="team-role">${esc(teamLead.role)}</p>
+    <h2>${esc(teamLead.name)}</h2>
+    ${teamLead.qualifications ? `<p class="team-quals">${esc(teamLead.qualifications)}</p>` : ''}
+    ${teamLead.bio.map((b) => `<p>${esc(b)}</p>`).join('')}
+    <ul class="team-areas">${teamLead.areas.map((a) => `<li>${esc(a)}</li>`).join('')}</ul>
+  </div>
+</div></section>` : ''}
+${associates.length ? `<section class="section section-mist" aria-labelledby="assoc-h"><div class="wrap">
+  <h2 id="assoc-h">Associates</h2>
+  <ul class="team-grid">${associates.map((m) => `<li id="${m.slug}">
+    <figure class="team-photo">${teamPicture(rel, m, '(min-width: 1100px) 22rem, (min-width: 700px) 45vw, 90vw')}</figure>
+    <p class="team-role">${esc(m.role)}</p>
+    <h3>${esc(m.name)}</h3>
+    ${m.qualifications ? `<p class="team-quals">${esc(m.qualifications)}</p>` : ''}
+    ${m.bio.map((b) => `<p>${esc(b)}</p>`).join('')}
+    <ul class="team-areas">${m.areas.map((a) => `<li>${esc(a)}</li>`).join('')}</ul>
+  </li>`).join('')}</ul>
+</div></section>` : ''}`,
+});
+
 // ---------- contact ----------
 
 render({
@@ -884,6 +940,7 @@ ${posts.map((g) => `- [${g.title}](${abs(`legal-guides/${g.slug}.html`)}): ${g.s
 
 ## Pages
 - [About the advocate](${abs('about.html')})
+- [Our team](${abs('team.html')})
 - [Office opening photos](${abs('gallery.html')})
 - [Ask a legal question](${abs('ask.html')}): search our guides and practice pages
 - [Contact and directions](${abs('contact.html')})
