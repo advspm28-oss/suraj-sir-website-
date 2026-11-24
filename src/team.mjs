@@ -56,10 +56,9 @@ export const team = [
     areas: ['Criminal law', 'Legal research', 'Drafting', 'Court proceedings'],
   },
   {
-    // Hidden until confirmed: (1) "BALLB" read as B.A. LL.B.; (2) a higher-resolution photo,
-    // since the one received is 283 x 511 pixels. ("AQUA LEGAL" in her original bio was a previous firm.)
-    draft: true,
+    // "BALLB" in her original bio read as B.A. LL.B.; "AQUA LEGAL" there was a previous firm.
     slug: 'aishwarya-wani',
+    photo: { w: 800, h: 733 }, // supplied finished; shown uncropped and unedited
     name: 'Adv. Aishwarya Wani',
     role: 'Associate Advocate',
     qualifications: 'B.A. LL.B., LL.M.',
