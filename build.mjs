@@ -8,6 +8,7 @@ import { criminalPosts } from './src/criminal-posts.mjs';
 import { situations, bailPeriods } from './src/situations.mjs';
 import { gallery } from './src/gallery.mjs';
 import { team } from './src/team.mjs';
+const founder = team.find((m) => m.lead);
 
 const posts = [...criminalPosts, ...familyPosts].sort((a, b) => b.date.localeCompare(a.date));
 
@@ -142,6 +143,7 @@ const personSchema = () => ({
   '@type': 'Person',
   '@id': personId,
   name: site.advocate,
+  alternateName: 'Suraj Madewad Jamadar',
   jobTitle: 'Advocate',
   image: abs('assets/img/advocate-square-600.jpg'),
   worksFor: { '@id': firmId },
@@ -617,20 +619,13 @@ render({
   </figure>
   <div class="prose">
     <h2>${esc(site.advocate)}</h2>
-    <p>${esc(site.advocate)} practises from an office at the back of the Family Court in Shivaji Nagar, Pune, with a team of associates. The practice handles family, criminal and civil matters, with most of its work before the Family Court, the District and Sessions Court and the Civil Court in Pune.</p>
-    <p>${todo('A short paragraph in the advocate’s own words: how the practice began, the kind of cases taken on, and how clients are kept informed.')}</p>
-    <h2>Education and enrolment</h2>
-    <ul>
-      <li>${todo('Law degree, college and year')}</li>
-      <li>${esc(site.enrolment)}, enrolment no. ${todo('MAH/____/____')}</li>
-      <li>${todo('Practising since ____')}</li>
-    </ul>
+    ${founder.bio.map((b) => `<p>${esc(b)}</p>`).join('')}
+    <h2>Education and Bar membership</h2>
+    <ul>${founder.education.map((e) => `<li>${esc(e)}</li>`).join('')}<li>${esc(site.enrolment)}</li></ul>
     <h2>Courts</h2>
-    <p>Family Court, Pune; District and Sessions Court, Pune; Civil Court, Pune. ${todo('Add the Bombay High Court or other forums if applicable.')}</p>
-    <h2>Languages</h2>
-    <p>${todo('e.g. Marathi, Hindi and English')}</p>
-    <h2>Associates</h2>
-    <p>${todo('Names and enrolment details of associates, if they are to be listed.')}</p>
+    <p>The Magistrate courts, the Sessions Court, the special courts and the Civil Court at Shivaji Nagar, Pune. Associates of the firm also appear before the Bombay High Court and the Supreme Court of India.</p>
+    <h2>The team</h2>
+    <p>The practice works with associate advocates and legal interns. <a href="${rel}team.html">Meet the team</a>.</p>
     <p><a class="btn btn-ink" href="${rel}contact.html"><span>Contact the office</span></a></p>
   </div>
 </div></section>
@@ -722,6 +717,7 @@ render({
     '@type': 'Person',
     ...(m.lead ? { '@id': personId } : {}),
     name: m.name,
+    ...(m.alternateName ? { alternateName: m.alternateName } : {}),
     jobTitle: m.role,
     image: abs(`assets/img/team/${m.slug}-800.jpg`),
     worksFor: { '@id': firmId },

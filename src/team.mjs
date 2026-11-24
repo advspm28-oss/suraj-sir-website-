@@ -9,14 +9,22 @@ export const team = [
   {
     slug: 'sp-madewad-jamadar',
     name: 'Adv. S. P. Madewad Jamadar',
+    alternateName: 'Adv. Suraj Madewad Jamadar',
     role: 'Founder',
     lead: true,
-    qualifications: '', // TODO: degrees, e.g. "B.A. LL.B."
-    bio: [
-      'Adv. S. P. Madewad Jamadar founded the practice and leads its criminal defence work, from anticipatory and regular bail to trials under special Acts such as the MPID, POCSO, SC/ST, MCOCA and NDPS Acts.',
-      'Adv. Madewad Jamadar appears before the Magistrate courts, the Sessions Court and the special courts at Shivaji Nagar, Pune, and also handles family and civil matters.',
+    qualifications: 'B.A. LL.B. (2020)',
+    education: [
+      'B.A. LL.B., SCLC, Savitribai Phule Pune University (2020)',
+      'Member of the Pune Bar Association since December 2020',
+      'Diploma in journalism',
     ],
-    areas: ['Criminal defence', 'Bail and anticipatory bail', 'Special Acts', 'Family law'],
+    bio: [
+      'Adv. Suraj Madewad Jamadar founded Adv. S. P. Madewad Jamadar & Associates in Shivaji Nagar, Pune, and practises on both the criminal and civil sides. He graduated with a B.A. LL.B. from SCLC, Savitribai Phule Pune University, in 2020 and joined the Pune Bar Association in December 2020.',
+      'His training began with internships in 2018 under Adv. Rohan P. Shetty and Adv. Bipin Pathole, and in 2019 under Adv. Rohit Pandey, Secretary of the Supreme Court Bar Association, New Delhi. After enrolment he practised under Adv. Rohan Shetty and Adv. Tarak Patil, and went on to work with Adv. Harshal Sunil Patil of the Bombay High Court and civil lawyer Adv. Sudip Kenjalkar, before establishing his own practice.',
+      'He also holds a diploma in journalism and has worked with newspapers and electronic media. Active in public life since 2016, he has served as a spokesperson for ABVP, worked with NSUI, the Youth Congress and the Congress Legal Cell, and served as Secretary of the Youth Congress, Pune City. He has served three consecutive terms as Secretary of the Bidar Jilha Pune Rahiwasi Social Foundation.',
+      'That mix of courtroom training, media work and years of community service shapes how he works with clients. People usually reach the firm at a difficult moment: a police notice, an arrest in the family, or a dispute that has turned into a court case. He makes time to explain where the matter stands and what each step involves, in plain language, so that clients can take decisions with a clear picture. With associates who appear from the Pune courts to the Bombay High Court and the Supreme Court, he leads a team that can carry a matter through every stage.',
+    ],
+    areas: ['Criminal defence', 'Civil litigation', 'Bail and anticipatory bail', 'Special Acts'],
   },
   {
     slug: 'neha-arjunwadkar',
