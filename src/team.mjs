@@ -3,7 +3,7 @@
 // Bios state only what each member has confirmed. Bar Council rules: no self-praise,
 // no claims of results or expertise beyond the courts and areas they appear in.
 // Set draft: true to keep someone off the site until their details are confirmed.
-// links: [{ type: 'linkedin' | 'facebook', url }] — add only profiles the member has confirmed are theirs.
+// links: [{ type: 'linkedin' | 'facebook' | 'instagram', url }] — add only profiles the member has confirmed are theirs.
 
 export const team = [
   {
@@ -25,6 +25,10 @@ export const team = [
       'That mix of courtroom training, media work and years of community service shapes how he works with clients. People usually reach the firm at a difficult moment: a police notice, an arrest in the family, or a dispute that has turned into a court case. He makes time to explain where the matter stands and what each step involves, in plain language, so that clients can take decisions with a clear picture. With associates who appear from the Pune courts to the Bombay High Court and the Supreme Court, he leads a team that can carry a matter through every stage.',
     ],
     areas: ['Criminal defence', 'Civil litigation', 'Bail and anticipatory bail', 'Special Acts'],
+    links: [
+      { type: 'facebook', url: 'https://www.facebook.com/share/1LMCJEFdSQ/' },
+      { type: 'instagram', url: 'https://www.instagram.com/surajmad8268/' },
+    ],
   },
   {
     slug: 'neha-arjunwadkar',

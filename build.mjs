@@ -590,6 +590,12 @@ for (const g of posts) {
 
 // ---------- about ----------
 
+const linkLabels = { linkedin: 'LinkedIn', facebook: 'Facebook', instagram: 'Instagram' };
+const teamLinks = (m) =>
+  m.links && m.links.length
+    ? `<p class="team-links">${m.links.map((l) => `<a href="${esc(l.url)}" rel="noopener me" target="_blank">${esc(linkLabels[l.type] || l.type)}<span class="sr-only"> profile of ${esc(m.name)} (opens in a new tab)</span></a>`).join('')}</p>`
+    : '';
+
 const photoPicture = (rel, p, sizes) => {
   const base = `${rel}assets/img/office-opening/opening-${p.n}`;
   return `<picture><source type="image/webp" srcset="${base}-800.webp ${p.w}w, ${base}-1600.webp ${p.fw}w" sizes="${sizes}"><img src="${base}-800.jpg" width="${p.w}" height="${p.h}" alt="${esc(p.alt)}" loading="lazy" decoding="async"></picture>`;
@@ -620,6 +626,7 @@ render({
   <div class="prose">
     <h2>${esc(site.advocate)}</h2>
     ${founder.bio.map((b) => `<p>${esc(b)}</p>`).join('')}
+    ${teamLinks(founder)}
     <h2>Education and Bar membership</h2>
     <ul>${founder.education.map((e) => `<li>${esc(e)}</li>`).join('')}<li>${esc(site.enrolment)}</li></ul>
     <h2>Courts</h2>
@@ -687,11 +694,6 @@ render({
 const teamPicture = (rel, m, sizes, eager = false) =>
   `<picture><source type="image/webp" srcset="${rel}assets/img/team/${m.slug}-480.webp 480w, ${rel}assets/img/team/${m.slug}-800.webp 800w" sizes="${sizes}"><img src="${rel}assets/img/team/${m.slug}-800.jpg" width="${m.photo ? m.photo.w : 800}" height="${m.photo ? m.photo.h : 1000}" alt="${esc(m.name)}"${m.photo ? ' class="as-is"' : ''}${eager ? '' : ' loading="lazy"'}></picture>`;
 const members = team.filter((m) => !m.draft);
-const linkLabels = { linkedin: 'LinkedIn', facebook: 'Facebook' };
-const teamLinks = (m) =>
-  m.links && m.links.length
-    ? `<p class="team-links">${m.links.map((l) => `<a href="${esc(l.url)}" rel="noopener me" target="_blank">${esc(linkLabels[l.type] || l.type)}<span class="sr-only"> profile of ${esc(m.name)} (opens in a new tab)</span></a>`).join('')}</p>`
-    : '';
 const teamLead = members.find((m) => m.lead);
 const isIntern = (m) => /intern/i.test(m.role);
 const associates = members.filter((m) => !m.lead && !isIntern(m));
