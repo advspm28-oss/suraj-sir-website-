@@ -43,6 +43,18 @@ export const team = [
     areas: ['Criminal litigation', 'Special Acts', 'Revenue matters', 'Consumer cases', 'Labour cases'],
   },
   {
+    slug: 'suraj-ithape',
+    name: 'Adv. Suraj Ithape',
+    role: 'Associate Advocate',
+    qualifications: 'B.Com., LL.B.',
+    photo: { w: 800, h: 733 }, // supplied finished; shown uncropped and unedited
+    bio: [
+      'Adv. Suraj Ithape is an Associate Advocate at Adv. S. P. Madewad Jamadar & Associates, Shivaji Nagar, Pune. A law graduate of Shri Yashwantrao Chavan Law College, Pune, he practises in criminal and civil litigation, matters before the Debts Recovery Tribunal (DRT) and cases under special Acts.',
+      'He has also worked on commercial litigation, consumer law and insurance law matters, and assists the firm with filing and listing its matters before the courts so that they are free of procedural defects.',
+    ],
+    areas: ['Criminal litigation', 'Civil litigation', 'DRT matters', 'Special Acts', 'Commercial litigation', 'Consumer cases', 'Insurance law'],
+  },
+  {
     // Law student: her photo is without advocate's bands, which only enrolled advocates wear.
     slug: 'pranjal-gaikwad',
     name: 'Miss. Pranjal Gaikwad',
