@@ -31,6 +31,21 @@ export const team = [
     areas: ['Criminal litigation', 'Special Acts', 'Revenue matters', 'Consumer cases', 'Labour cases'],
   },
   {
+    // Hidden until confirmed: her photo shows advocate's bands, which are worn only by
+    // enrolled advocates; she is a law student. Also confirm the college's name.
+    draft: true,
+    slug: 'pranjal-gaikwad',
+    name: 'Miss. Pranjal Gaikwad',
+    role: 'Legal Intern',
+    qualifications: 'B.A. LL.B. (fourth year)',
+    photo: { w: 800, h: 733 }, // supplied finished; shown uncropped and unedited
+    bio: [
+      'Miss. Pranjal Gaikwad is a fourth-year B.A. LL.B. student at Shri Shivaji Maratha Society\u2019s Law College, Pune, and a Legal Intern at Adv. S. P. Madewad Jamadar & Associates, Shivaji Nagar, Pune.',
+      'She assists the advocates with legal research, drafting, case analysis, documentation and court-related work, while building practical experience of litigation.',
+    ],
+    areas: ['Legal research', 'Drafting', 'Case analysis', 'Documentation'],
+  },
+  {
     // Hidden until confirmed: (1) "BALLB" read as B.A. LL.B.; (2) a higher-resolution photo,
     // since the one received is 283 x 511 pixels. ("AQUA LEGAL" in her original bio was a previous firm.)
     draft: true,

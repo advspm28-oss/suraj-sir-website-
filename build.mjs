@@ -698,7 +698,18 @@ const teamLinks = (m) =>
     ? `<p class="team-links">${m.links.map((l) => `<a href="${esc(l.url)}" rel="noopener me" target="_blank">${esc(linkLabels[l.type] || l.type)}<span class="sr-only"> profile of ${esc(m.name)} (opens in a new tab)</span></a>`).join('')}</p>`
     : '';
 const teamLead = members.find((m) => m.lead);
-const associates = members.filter((m) => !m.lead);
+const isIntern = (m) => /intern/i.test(m.role);
+const associates = members.filter((m) => !m.lead && !isIntern(m));
+const interns = members.filter((m) => isIntern(m));
+const teamCard = (rel, m) => `<li id="${m.slug}">
+    <figure class="team-photo">${teamPicture(rel, m, '(min-width: 1100px) 22rem, (min-width: 700px) 45vw, 90vw')}</figure>
+    <p class="team-role">${esc(m.role)}</p>
+    <h3>${esc(m.name)}</h3>
+    ${m.qualifications ? `<p class="team-quals">${esc(m.qualifications)}</p>` : ''}
+    ${m.bio.map((b) => `<p>${esc(b)}</p>`).join('')}
+    <ul class="team-areas">${m.areas.map((a) => `<li>${esc(a)}</li>`).join('')}</ul>
+    ${teamLinks(m)}
+  </li>`;
 
 render({
   file: 'team.html',
@@ -737,15 +748,11 @@ ${teamLead ? `<section class="section"><div class="wrap team-lead" id="${teamLea
 </div></section>` : ''}
 ${associates.length ? `<section class="section section-mist" aria-labelledby="assoc-h"><div class="wrap">
   <h2 id="assoc-h">Associates</h2>
-  <ul class="team-grid">${associates.map((m) => `<li id="${m.slug}">
-    <figure class="team-photo">${teamPicture(rel, m, '(min-width: 1100px) 22rem, (min-width: 700px) 45vw, 90vw')}</figure>
-    <p class="team-role">${esc(m.role)}</p>
-    <h3>${esc(m.name)}</h3>
-    ${m.qualifications ? `<p class="team-quals">${esc(m.qualifications)}</p>` : ''}
-    ${m.bio.map((b) => `<p>${esc(b)}</p>`).join('')}
-    <ul class="team-areas">${m.areas.map((a) => `<li>${esc(a)}</li>`).join('')}</ul>
-    ${teamLinks(m)}
-  </li>`).join('')}</ul>
+  <ul class="team-grid">${associates.map((m) => teamCard(rel, m)).join('')}</ul>
+</div></section>` : ''}
+${interns.length ? `<section class="section" aria-labelledby="interns-h"><div class="wrap">
+  <h2 id="interns-h">Interns</h2>
+  <ul class="team-grid">${interns.map((m) => teamCard(rel, m)).join('')}</ul>
 </div></section>` : ''}`,
 });
 
