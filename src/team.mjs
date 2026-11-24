@@ -31,6 +31,19 @@ export const team = [
     areas: ['Civil litigation', 'Co-operative housing societies', 'Deemed conveyance', 'Family law', 'Notary services'],
   },
   {
+    slug: 'vaishnavi-wani',
+    name: 'Adv. Vaishnavi Wani',
+    role: 'Associate Advocate',
+    qualifications: 'B.A. LL.B., LL.M.',
+    photo: { w: 800, h: 732 }, // supplied finished; shown uncropped and unedited
+    bio: [
+      'Adv. Vaishnavi Wani is an Associate Advocate at Adv. S. P. Madewad Jamadar & Associates, Shivaji Nagar, Pune. She holds a B.A. LL.B. and a Master of Laws (LL.M.), which she completed in Delhi.',
+      'Adv. Wani has appeared in and handled several matters before the Supreme Court of India and the Bombay High Court, and is a key member of the team for matters in the higher courts.',
+      'Cases that begin in the Pune courts often go on to the Bombay High Court, through bail applications, appeals, revisions and petitions to quash an FIR. Her work before the higher courts allows the team to take a client\u2019s matter forward from Pune to the Bombay High Court and the Supreme Court.',
+    ],
+    areas: ['Supreme Court of India', 'Bombay High Court', 'Appeals and petitions'],
+  },
+  {
     slug: 'tejas-dhabugade',
     name: 'Adv. Tejas Anandrao Dhabugade',
     role: 'Associate Advocate',
