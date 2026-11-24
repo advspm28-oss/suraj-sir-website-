@@ -19,6 +19,18 @@ export const team = [
     areas: ['Criminal defence', 'Bail and anticipatory bail', 'Special Acts', 'Family law'],
   },
   {
+    slug: 'neha-arjunwadkar',
+    name: 'Adv. Neha Arjunwadkar',
+    role: 'Associate Advocate and Notary',
+    qualifications: 'B.A. LL.B., Notary (Government of India)',
+    photo: { w: 800, h: 733 }, // supplied finished; shown uncropped and unedited
+    bio: [
+      'Adv. Neha Arjunwadkar is an Associate Advocate at Adv. S. P. Madewad Jamadar & Associates, Shivaji Nagar, Pune, and a Notary appointed by the Government of India. In practice since 2010, Adv. Arjunwadkar handles civil litigation, co-operative housing society matters, deemed conveyance and family law cases.',
+      'For housing societies in Pune, this includes applications for deemed conveyance, through which a society can obtain title to its land and building when the developer has not executed the conveyance.',
+    ],
+    areas: ['Civil litigation', 'Co-operative housing societies', 'Deemed conveyance', 'Family law', 'Notary services'],
+  },
+  {
     slug: 'tejas-dhabugade',
     name: 'Adv. Tejas Anandrao Dhabugade',
     role: 'Associate Advocate',
