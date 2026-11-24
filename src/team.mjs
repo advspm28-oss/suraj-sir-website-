@@ -31,9 +31,7 @@ export const team = [
     areas: ['Criminal litigation', 'Special Acts', 'Revenue matters', 'Consumer cases', 'Labour cases'],
   },
   {
-    // Hidden until confirmed: her photo shows advocate's bands, which are worn only by
-    // enrolled advocates; she is a law student. Also confirm the college's name.
-    draft: true,
+    // Law student: her photo is without advocate's bands, which only enrolled advocates wear.
     slug: 'pranjal-gaikwad',
     name: 'Miss. Pranjal Gaikwad',
     role: 'Legal Intern',
