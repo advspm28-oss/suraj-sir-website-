@@ -518,3 +518,5 @@ mark { background: var(--tape-soft); color: inherit; border-radius: 2px; box-sha
 .team-grid p { margin-bottom: 0.75rem; }
 @media (max-width: 860px) { .team-lead { grid-template-columns: 1fr; } .team-lead .team-photo { max-width: 24rem; } }
 .brand strong { white-space: nowrap; }
+.team-links { display: flex; gap: 1.25rem; margin: 1rem 0 0; }
+.team-links a { font-weight: 600; text-decoration-color: var(--tape); text-decoration-thickness: 2px; }

@@ -3,6 +3,7 @@
 // Bios state only what each member has confirmed. Bar Council rules: no self-praise,
 // no claims of results or expertise beyond the courts and areas they appear in.
 // Set draft: true to keep someone off the site until their details are confirmed.
+// links: [{ type: 'linkedin' | 'facebook', url }] — add only profiles the member has confirmed are theirs.
 
 export const team = [
   {

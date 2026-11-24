@@ -692,6 +692,11 @@ render({
 const teamPicture = (rel, m, sizes, eager = false) =>
   `<picture><source type="image/webp" srcset="${rel}assets/img/team/${m.slug}-480.webp 480w, ${rel}assets/img/team/${m.slug}-800.webp 800w" sizes="${sizes}"><img src="${rel}assets/img/team/${m.slug}-800.jpg" width="800" height="1000" alt="${esc(m.name)}"${eager ? '' : ' loading="lazy"'}></picture>`;
 const members = team.filter((m) => !m.draft);
+const linkLabels = { linkedin: 'LinkedIn', facebook: 'Facebook' };
+const teamLinks = (m) =>
+  m.links && m.links.length
+    ? `<p class="team-links">${m.links.map((l) => `<a href="${esc(l.url)}" rel="noopener me" target="_blank">${esc(linkLabels[l.type] || l.type)}<span class="sr-only"> profile of ${esc(m.name)} (opens in a new tab)</span></a>`).join('')}</p>`
+    : '';
 const teamLead = members.find((m) => m.lead);
 const associates = members.filter((m) => !m.lead);
 
@@ -711,6 +716,7 @@ render({
     worksFor: { '@id': firmId },
     knowsAbout: m.areas,
     url: abs(`team.html#${m.slug}`),
+    ...(m.links && m.links.length ? { sameAs: m.links.map((l) => l.url) } : {}),
   })),
   body: (rel) => `
 <section class="page-head"><div class="wrap">
@@ -726,6 +732,7 @@ ${teamLead ? `<section class="section"><div class="wrap team-lead" id="${teamLea
     ${teamLead.qualifications ? `<p class="team-quals">${esc(teamLead.qualifications)}</p>` : ''}
     ${teamLead.bio.map((b) => `<p>${esc(b)}</p>`).join('')}
     <ul class="team-areas">${teamLead.areas.map((a) => `<li>${esc(a)}</li>`).join('')}</ul>
+    ${teamLinks(teamLead)}
   </div>
 </div></section>` : ''}
 ${associates.length ? `<section class="section section-mist" aria-labelledby="assoc-h"><div class="wrap">
@@ -737,6 +744,7 @@ ${associates.length ? `<section class="section section-mist" aria-labelledby="as
     ${m.qualifications ? `<p class="team-quals">${esc(m.qualifications)}</p>` : ''}
     ${m.bio.map((b) => `<p>${esc(b)}</p>`).join('')}
     <ul class="team-areas">${m.areas.map((a) => `<li>${esc(a)}</li>`).join('')}</ul>
+    ${teamLinks(m)}
   </li>`).join('')}</ul>
 </div></section>` : ''}`,
 });
