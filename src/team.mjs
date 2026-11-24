@@ -44,6 +44,18 @@ export const team = [
     areas: ['Legal research', 'Drafting', 'Case analysis', 'Documentation'],
   },
   {
+    slug: 'ashwini-ovhal',
+    name: 'Miss. Ashwini Sanjay Ovhal',
+    role: 'Legal Intern',
+    qualifications: 'B.A. LL.B. (fourth year)',
+    photo: { w: 800, h: 733 }, // supplied finished; shown uncropped and unedited
+    bio: [
+      'Miss. Ashwini Sanjay Ovhal is a fourth-year B.A. LL.B. student at Shri Shivaji Maratha Society\u2019s Law College, Pune, and a Legal Intern at Adv. S. P. Madewad Jamadar & Associates, Shivaji Nagar, Pune.',
+      'Ashwini\u2019s interests lie in criminal law, litigation and courtroom advocacy, legal research and drafting. As an intern, Ashwini is gaining practical experience of court proceedings through hands-on work on the firm\u2019s matters, under the guidance of its advocates.',
+    ],
+    areas: ['Criminal law', 'Legal research', 'Drafting', 'Court proceedings'],
+  },
+  {
     // Hidden until confirmed: (1) "BALLB" read as B.A. LL.B.; (2) a higher-resolution photo,
     // since the one received is 283 x 511 pixels. ("AQUA LEGAL" in her original bio was a previous firm.)
     draft: true,
