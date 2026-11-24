@@ -98,6 +98,7 @@ function footer(rel) {
   <a href="tel:${site.phone}">${icon.phone}<span>Call</span></a>
   <a href="${waLink('Hello, I would like to ask about a legal matter.')}">${icon.whatsapp}<span>WhatsApp</span></a>
 </div>
+<a class="wa-float" href="${waLink()}" rel="noopener"><span class="wa-float-icon">${icon.whatsapp}</span><span>WhatsApp us</span></a>
 <dialog id="bci-disclaimer" class="disclaimer" aria-labelledby="bci-title">
   <h2 id="bci-title">Before you continue</h2>
   <p>The Bar Council of India does not permit advocates to solicit work or advertise. By continuing, you confirm that:</p>
@@ -185,6 +186,10 @@ ${noindex ? '<meta name="robots" content="noindex">' : `<link rel="canonical" hr
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#231f20">
 <link rel="icon" href="${rel}assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="${rel}assets/icons/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="${rel}assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="${rel}site.webmanifest">
+${site.googleVerification ? `<meta name="google-site-verification" content="${esc(site.googleVerification)}">` : ''}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700&family=Tiro+Devanagari+Marathi:ital@0;1&display=swap">
@@ -214,6 +219,12 @@ const contactAside = (rel, label) => `<aside class="aside-card">
   <a class="btn btn-line" href="${waLink(`Hello, I would like advice about a ${label.toLowerCase()} matter.`)}">${icon.whatsapp}<span>Message on WhatsApp</span></a>
   <p class="aside-note">${icon.pin}<span>${esc(site.address.line1)}, behind the Family Court, Shivaji Nagar</span></p>
 </aside>`;
+
+// Google map of the office. Shown only once site.mapEmbedUrl is set from the business profile.
+const mapFrame = () =>
+  site.mapEmbedUrl
+    ? `<div class="map-frame"><iframe src="${esc(site.mapEmbedUrl)}" title="Map showing ${esc(site.firm)}, ${esc(site.address.line1)}, Shivaji Nagar, Pune" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe></div>`
+    : '';
 
 const faqHtml = (faqs) =>
   `<section class="faq" aria-labelledby="faq-h"><h2 id="faq-h">Common questions</h2>${faqs
@@ -440,6 +451,7 @@ render({
       <div><dt>Email</dt><dd><a href="mailto:${site.email}">${esc(site.email)}</a></dd></div>
     </dl>
   </div>
+  ${site.mapEmbedUrl ? `<div class="wrap visit-map">${mapFrame()}</div>` : ''}
 </section>`,
 });
 
@@ -790,6 +802,10 @@ render({
     <address>${esc(site.firm)}<br>${esc(site.address.line1)}<br>${esc(site.address.line2)}<br>${esc(site.address.locality)}, ${esc(site.address.city)} ${esc(site.address.postalCode)}<br>${esc(site.address.region)}</address>
     <a class="btn btn-line" href="${site.mapsUrl}" rel="noopener">${icon.pin}<span>Get directions</span></a>
     <h2>Phone and email</h2>
+    <div class="contact-actions">
+      <a class="btn btn-ink" href="tel:${site.phone}">${icon.phone}<span>Call ${esc(site.phoneDisplay)}</span></a>
+      <a class="btn btn-line" href="${waLink()}">${icon.whatsapp}<span>WhatsApp ${esc(site.whatsappDisplay)}</span></a>
+    </div>
     <ul class="contact-list">
       <li>${icon.phone}<a href="tel:${site.phone}">${esc(site.phoneDisplay)}</a></li>
       <li>${icon.whatsapp}<a href="${waLink()}">${esc(site.whatsappDisplay)}</a> (WhatsApp)</li>
@@ -797,6 +813,7 @@ render({
     </ul>
     <h2>Office hours</h2>
     <dl class="hours">${site.hours.map((h) => `<div><dt>${esc(h.days)}</dt><dd>${esc(h.label)}</dd></div>`).join('')}</dl>
+    ${mapFrame()}
   </div>
 </div></section>`,
 });
@@ -828,16 +845,31 @@ render({
   body: (rel) => `
 <section class="page-head"><div class="wrap narrow">${crumbsHtml(rel, [['Home', 'index.html'], ['Privacy policy', 'privacy-policy.html']])}<h1>Privacy policy</h1></div></section>
 <section class="section"><div class="wrap narrow prose">
-  <p>This policy explains how ${esc(site.firm)} handles information you share with us, in line with the Digital Personal Data Protection Act, 2023.</p>
-  <h2>What we collect</h2>
-  <p>This website does not use forms that store your data on our servers. The enquiry form opens WhatsApp on your device with your message, and you decide whether to send it. When you call, message or email us, we receive the details you choose to share.</p>
-  <h2>How we use it</h2>
-  <p>Only to respond to your enquiry and, if you instruct us, to act in your matter. We do not sell or share your information for marketing.</p>
+  <p>This policy explains how ${esc(site.firm)} handles personal information when you use this website or contact us through it, in line with the Digital Personal Data Protection Act, 2023. Last updated: 24 November 2026.</p>
+  <h2>What we receive</h2>
+  <p>This website has no accounts and does not store forms on a server. We receive only what you choose to send us:</p>
+  <ul>
+    <li><strong>Calls, WhatsApp messages and emails</strong> you send to the office, with the details you include.</li>
+    <li><strong>The enquiry form</strong> does not send anything to us by itself. It opens WhatsApp on your device with your message ready, and you decide whether to send it. Messages started from this website include the words "Sent from the website" so the office knows where they came from.</li>
+  </ul>
+  <p>The <a href="${rel}ask.html">Ask a question</a> search and the default bail calculator run entirely in your browser. What you type there is not sent to us or stored.</p>
+  <h2>Services this website uses</h2>
+  <ul>
+    <li><strong>WhatsApp</strong> (Meta) handles messages you send through WhatsApp, under its own privacy policy.</li>
+    <li><strong>Google Fonts</strong> supplies the typefaces, and <strong>Google Maps</strong> shows the office location where a map is displayed. Your browser connects to Google to load them.</li>
+    <li><strong>Our hosting provider</strong> keeps standard server logs, such as IP addresses and pages requested, for security and to keep the site running. We may use privacy-friendly visitor statistics that count visits without cookies and without identifying you.</li>
+  </ul>
+  <p>Your browser remembers that you accepted the Bar Council disclaimer, so it is not shown again. This stays on your device and can be cleared at any time.</p>
+  <h2>How we use your information</h2>
+  <p>Only to respond to your enquiry and, if you instruct us, to act in your matter. We do not sell your information or share it for marketing.</p>
   <h2>Confidentiality</h2>
-  <p>Information you share with us for the purpose of legal advice is confidential and protected by professional privilege.</p>
+  <p>Information you share with us for the purpose of legal advice is confidential and protected by professional privilege. Please do not send confidential documents over WhatsApp before we have spoken.</p>
+  <h2>How long we keep it</h2>
+  <p>Enquiries that do not lead to an engagement are deleted when no longer needed. Records of matters we act in are kept for as long as our legal and professional duties require.</p>
   <h2>Your rights</h2>
-  <p>You can ask us to correct or delete personal information we hold about you, subject to our legal and professional record-keeping duties. Write to <a href="mailto:${site.email}">${esc(site.email)}</a>.</p>
-  <p>${todo('Have this policy reviewed before launch, and add any analytics tools used.')}</p>
+  <p>You can ask us to access, correct or erase personal information we hold about you, or withdraw consent you have given, subject to our legal and professional record-keeping duties. For any of these, or a grievance about how your information is handled, write to <a href="mailto:${site.email}">${esc(site.email)}</a> or call <a href="tel:${site.phone}">${esc(site.phoneDisplay)}</a>.</p>
+  <h2>Changes</h2>
+  <p>If this policy changes, the updated version will be posted on this page with a new date.</p>
 </div></section>`,
 });
 
@@ -929,6 +961,44 @@ ${pages
   })
   .join('\n')}
 </urlset>
+`,
+);
+
+fs.writeFileSync(
+  path.join(OUT, 'site.webmanifest'),
+  JSON.stringify(
+    {
+      name: site.firm,
+      short_name: 'Madewad Jamadar',
+      start_url: '/',
+      display: 'browser',
+      background_color: '#ffffff',
+      theme_color: '#231f20',
+      icons: [
+        { src: '/assets/icons/icon-192.png', sizes: '192x192', type: 'image/png' },
+        { src: '/assets/icons/icon-512.png', sizes: '512x512', type: 'image/png' },
+      ],
+    },
+    null,
+    2,
+  ),
+);
+
+// Cloudflare Pages (and Netlify) read this file: basic security headers, and a week's
+// cache for images. CSS and JS keep the host's default so updates show immediately.
+fs.writeFileSync(
+  path.join(OUT, '_headers'),
+  `/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: SAMEORIGIN
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
+
+/assets/img/*
+  Cache-Control: public, max-age=604800
+
+/assets/icons/*
+  Cache-Control: public, max-age=604800
 `,
 );
 

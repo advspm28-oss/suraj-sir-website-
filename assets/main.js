@@ -1,5 +1,6 @@
 // Small progressive enhancements. Every page works without this file.
 (() => {
+  const WA_TAG = '\n\n(Sent from the website)'; // keep in step with src/site.mjs
   // Bar Council of India disclaimer: shown once per visitor.
   const dialog = document.getElementById('bci-disclaimer');
   let agreed = false;
@@ -154,7 +155,7 @@
       else status.textContent = `The period ended ${-left === 1 ? 'yesterday' : `${-left} days ago`}. If no chargesheet has been filed, apply for default bail now.`;
       out('note').textContent = typeIn.selectedOptions[0].dataset.note || '';
       const text = `Hello, I would like advice on default bail. First remand: ${fmt(start)}. Offence type: ${typeIn.selectedOptions[0].textContent}. Chargesheet due by: ${fmt(due)}.`;
-      out('wa').href = `${waBase}?text=${encodeURIComponent(text)}`;
+      out('wa').href = `${waBase}?text=${encodeURIComponent(text + WA_TAG)}`;
     };
     form.addEventListener('input', update);
     form.addEventListener('submit', (e) => e.preventDefault());
@@ -185,7 +186,7 @@
       const data = new FormData(form);
       const text = `Hello, my name is ${data.get('name')}. I would like advice about: ${data.get('area')}.\n\n${data.get('text')}`;
       const link = document.createElement('a');
-      link.href = `${form.action}?text=${encodeURIComponent(text)}`;
+      link.href = `${form.action}?text=${encodeURIComponent(text + WA_TAG)}`;
       link.target = '_blank';
       link.rel = 'noopener';
       document.body.appendChild(link);

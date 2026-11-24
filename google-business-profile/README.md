@@ -30,19 +30,20 @@ Use exactly this, matching the visiting card and signboard. Don't add words like
 
 ### Business category
 
-Choose **one primary category**, the one that describes most of the work:
+Criminal defence is the main practice, so choose this as the **primary category**:
 
-| If most work is… | Primary category |
-|---|---|
-| Family Court matters (likely, given the office location) | `Family law attorney` |
-| A mix of everything | `Lawyer` |
+```
+Criminal justice attorney
+```
 
-Then add these as **additional categories** (leave out any that don't apply):
+Then add these as **additional categories**:
 
-- `Divorce lawyer`
-- `Criminal justice attorney`
-- `Lawyer` (if not chosen as primary)
+- `Lawyer`
 - `Legal services`
+- `Family law attorney`
+- `Notary public`
+
+If the profile was already created with a different primary category, change it under **Edit profile > Business category**.
 
 Type the name and pick it from Google's list. Categories can't be typed freely.
 
@@ -90,12 +91,11 @@ Upload it from the Google Maps app or business.google.com, as Google directs. Re
 
 After verification, open the profile (search "my business" on Google while signed in, or use business.google.com) and fill in the rest.
 
-### Description (686 of 750 characters)
+### Description (689 of 750 characters)
 
 ```
-Adv. S. P. Madewad Jamadar & Associates is an advocate's office in Shivaji Nagar, Pune, at the back side of the Family Court. We handle family, criminal and civil matters before the Family Court, the District and Sessions Court and the Civil Court in Pune. Family law work covers mutual consent and contested divorce, child custody and visitation, maintenance and alimony, and cases under the Domestic Violence Act. In criminal matters we act in anticipatory and regular bail, FIR quashing and trials, including cheque bounce cases under Section 138 of the Negotiable Instruments Act. We also handle property disputes, partition, injunctions and succession. Meetings are by appointment.
+Adv. S. P. Madewad Jamadar & Associates is an advocate's office in Shivaji Nagar, Pune, at the back side of the Family Court. Criminal defence is the main focus of the practice: anticipatory bail, regular and default bail, FIR quashing, and trials before the Magistrate courts, the Sessions Court and the special courts in Pune. We handle cases under the MPID Act, POCSO Act, SC/ST (Prevention of Atrocities) Act, MCOCA and NDPS Act, as well as 498A and cheque bounce cases. Our associates also appear before the Bombay High Court and the Supreme Court of India. We also handle family, civil, housing society and deemed conveyance matters, and notary services. Meetings are by appointment.
 ```
-
 Google doesn't allow links, phone numbers or offers in the description. This one has none, and it makes no claims that conflict with Bar Council rules.
 
 ### Hours (confirm)
@@ -104,6 +104,8 @@ Google doesn't allow links, phone numbers or offers in the description. This one
 |---|---|
 | Monday to Saturday | 10:30 am to 7:00 pm |
 | Sunday | Closed |
+
+The website says Sunday is "by appointment". Google has no by-appointment option for a day, so mark Sunday closed on the profile.
 
 Mark **court holidays and Diwali closures as special hours** when they come up. Wrong hours are one of the most common complaints on Maps.
 
@@ -121,14 +123,21 @@ Open **Services**, add each as a custom service, and paste the description.
 
 | Service name | Description |
 |---|---|
-| Divorce (mutual consent and contested) | Mutual consent divorce under Section 13B of the Hindu Marriage Act and Section 28 of the Special Marriage Act, and contested divorce petitions at the Family Court, Pune. |
-| Child custody and visitation | Interim and permanent custody, visitation rights and guardianship of minors under the Guardians and Wards Act and the Hindu Minority and Guardianship Act. |
-| Maintenance and alimony | Maintenance for a wife, children or parents under Section 144 BNSS, interim maintenance and permanent alimony. |
-| Domestic violence cases | Protection, residence and monetary relief under the Protection of Women from Domestic Violence Act, 2005, for complainants and respondents. |
-| Anticipatory and regular bail | Anticipatory bail under Section 482 BNSS and regular bail before the Sessions Court, Pune and the Bombay High Court. |
-| Criminal defence and FIR quashing | Defence at trial and quashing of FIRs and criminal proceedings, including matrimonial disputes under Section 85 BNS. |
-| Cheque bounce cases | Legal demand notices, complaints and defence in cheque dishonour cases under Section 138 of the Negotiable Instruments Act. |
-| Property and civil disputes | Partition suits, injunctions, specific performance of sale agreements, succession certificates and recovery suits. |
+| Anticipatory bail | Applications for anticipatory bail under Section 482 BNSS before the Sessions Court, Pune and the Bombay High Court. |
+| Regular and default bail | Regular bail before the Magistrate courts and the Sessions Court, Pune, and default bail under Section 187(3) BNSS when the chargesheet is late. |
+| Criminal defence and trials | Defence in criminal cases from the first police notice through charges, trial and appeal before the Pune courts. |
+| MPID Act cases | Defence of promoters, directors and employees, objections to property attachment, and claims by depositors before the Designated Court, Pune. |
+| POCSO Act cases | Bail and trial before the Special POCSO Court, Pune, and representation of children and their families. |
+| SC/ST Atrocities Act cases | Bail, appeals under Section 14A and trial before the Special Court under the SC/ST (Prevention of Atrocities) Act. |
+| MCOCA cases | Bail under Section 21(4) and defence before the Special MCOCA Court, Pune and the Bombay High Court. |
+| NDPS Act cases | Bail and defence in narcotics cases before the Special NDPS Court, Pune. |
+| 498A and dowry cases | Anticipatory bail, quashing and defence in cruelty and dowry cases under Section 85 BNS (earlier 498A IPC). |
+| FIR quashing | Petitions to the Bombay High Court to quash FIRs and criminal proceedings under Section 528 BNSS. |
+| Cheque bounce cases | Legal notices, complaints and defence under Section 138 of the Negotiable Instruments Act. |
+| Family law | Divorce, child custody, maintenance and domestic violence cases at the Family Court, Pune. |
+| Civil and property disputes | Civil litigation, partition, injunctions and recovery suits before the Civil Court, Pune. |
+| Housing societies and deemed conveyance | Co-operative housing society matters and deemed conveyance applications for societies in Pune. |
+| Notary services | Notarial services by a Notary appointed by the Government of India. |
 
 Leave prices blank.
 
@@ -161,7 +170,9 @@ Then add **real photos taken at the office**, which help most: the building from
    https://YOUR-DOMAIN/?utm_source=google&utm_medium=organic&utm_campaign=gbp
    ```
 2. Set **Appointment link** to the contact page: `https://YOUR-DOMAIN/contact.html`
-3. Open the profile in Google Maps, tap **Share**, copy the link, and paste it into `gbpUrl` in `src/site.mjs`. The website's "Get directions" buttons and its schema markup then point to the profile.
+3. Open the profile in Google Maps, tap **Share**, and send two things to whoever maintains the website:
+   - the link from **Copy link**, for `gbpUrl` in `src/site.mjs`. The "Get directions" buttons and the schema markup then point to the profile;
+   - on a computer, the address inside `src="..."` from **Embed a map**, for `mapEmbedUrl`. The map then appears on the home and contact pages.
 
 ---
 

@@ -12,7 +12,7 @@ export const team = [
     alternateName: 'Adv. Suraj Madewad Jamadar',
     role: 'Founder',
     lead: true,
-    qualifications: 'B.A. LL.B. (2020)',
+    qualifications: 'B.A. LL.B. (2020), Enrolment no. MAH/6406/2020',
     education: [
       'B.A. LL.B., SCLC, Savitribai Phule Pune University (2020)',
       'Member of the Pune Bar Association since December 2020',

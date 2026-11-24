@@ -158,7 +158,7 @@
   const render = (q) => {
     const { hits, terms } = search(q);
     const matched = new Set(terms ? terms.keys() : []);
-    if (waLink) waLink.href = `${waBase}?text=${encodeURIComponent(`Hello, I have a question: ${q}`)}`;
+    if (waLink) waLink.href = `${waBase}?text=${encodeURIComponent(`Hello, I have a question: ${q}\n\n(Sent from the website)`)}`;
     const top = hits[0];
     if (!top || top.score < 1.5 || top.coverage < 0.5) {
       results.innerHTML = `

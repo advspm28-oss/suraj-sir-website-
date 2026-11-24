@@ -4,16 +4,18 @@
 // Items marked TODO need confirming by the advocate before launch.
 
 export const site = {
-  // TODO: replace with the real domain once it is bought.
-  url: 'https://www.example.com',
+  // TODO: replace with the real domain once it is bought. It can also be set
+  // without editing code: the build reads a SITE_URL environment variable
+  // (set it in the hosting dashboard, e.g. SITE_URL=https://www.yourdomain.com).
+  url: (process.env.SITE_URL || 'https://www.example.com').replace(/\/+$/, ''),
   lang: 'en-IN',
 
   firm: 'Adv. S. P. Madewad Jamadar & Associates',
   shortName: 'Madewad Jamadar & Associates',
   advocate: 'Adv. S. P. Madewad Jamadar',
 
-  // TODO: add the Bar Council of Maharashtra & Goa enrolment number.
-  enrolment: 'Enrolled with the Bar Council of Maharashtra & Goa',
+  enrolmentNo: 'MAH/6406/2020',
+  enrolment: 'Enrolled with the Bar Council of Maharashtra & Goa, enrolment no. MAH/6406/2020',
 
   whatsapp: '918554899946',
   whatsappDisplay: '+91 85548 99946',
@@ -44,6 +46,15 @@ export const site = {
   // link here (Maps > the profile > Share > Copy link). The "Get directions"
   // buttons and the schema markup then point to the profile.
   gbpUrl: '',
+  // TODO: the map shown on the home and contact pages. In Google Maps, open the
+  // business profile, choose Share > Embed a map, and paste only the address
+  // inside src="..." here (it starts with https://www.google.com/maps/embed?pb=).
+  // Until then, no map is shown, so a wrong pin is never displayed.
+  mapEmbedUrl: '',
+
+  // Optional: Google Search Console "HTML tag" verification code (the content="..." value).
+  // Not needed if the domain is verified through DNS in Cloudflare.
+  googleVerification: '',
   mapsSearchUrl:
     'https://www.google.com/maps/search/?api=1&query=' +
     encodeURIComponent('Supreme Tower, Old Tophkhana Line, Shivaji Nagar, Pune'),
@@ -57,5 +68,7 @@ export const site = {
 export const fullAddress = () =>
   `${site.address.line1}, ${site.address.line2}, ${site.address.locality}, ${site.address.city} ${site.address.postalCode}`;
 
-export const waLink = (text) =>
-  `https://wa.me/${site.whatsapp}${text ? `?text=${encodeURIComponent(text)}` : ''}`;
+// Every WhatsApp message from the site is tagged, so the office can tell website leads apart.
+export const WA_TAG = '\n\n(Sent from the website)';
+export const waLink = (text = 'Hello, I would like to ask about a legal matter.') =>
+  `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(text + WA_TAG)}`;
