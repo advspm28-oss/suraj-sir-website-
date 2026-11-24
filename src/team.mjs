@@ -19,6 +19,18 @@ export const team = [
     areas: ['Criminal defence', 'Bail and anticipatory bail', 'Special Acts', 'Family law'],
   },
   {
+    slug: 'tejas-dhabugade',
+    name: 'Adv. Tejas Anandrao Dhabugade',
+    role: 'Associate Advocate',
+    qualifications: 'LL.B.',
+    photo: { w: 800, h: 733 }, // supplied finished; shown uncropped and unedited
+    bio: [
+      'Adv. Tejas Anandrao Dhabugade is an Associate Advocate in the criminal litigation practice of Adv. S. P. Madewad Jamadar & Associates, Shivaji Nagar, Pune. He handles a broad range of criminal cases, including matters under special Acts, and represents clients before the Sessions Court, the Magistrate courts and other judicial forums.',
+      'He also appears before revenue courts, consumer commissions and the Labour Court.',
+    ],
+    areas: ['Criminal litigation', 'Special Acts', 'Revenue matters', 'Consumer cases', 'Labour cases'],
+  },
+  {
     // Hidden until confirmed: (1) her bio names "AQUA LEGAL" as her firm; (2) "BALLB" read as B.A. LL.B.;
     // (3) a higher-resolution photo, since the one received is 283 x 511 pixels.
     draft: true,

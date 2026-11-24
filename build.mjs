@@ -690,7 +690,7 @@ render({
 // ---------- team ----------
 
 const teamPicture = (rel, m, sizes, eager = false) =>
-  `<picture><source type="image/webp" srcset="${rel}assets/img/team/${m.slug}-480.webp 480w, ${rel}assets/img/team/${m.slug}-800.webp 800w" sizes="${sizes}"><img src="${rel}assets/img/team/${m.slug}-800.jpg" width="800" height="1000" alt="${esc(m.name)}"${eager ? '' : ' loading="lazy"'}></picture>`;
+  `<picture><source type="image/webp" srcset="${rel}assets/img/team/${m.slug}-480.webp 480w, ${rel}assets/img/team/${m.slug}-800.webp 800w" sizes="${sizes}"><img src="${rel}assets/img/team/${m.slug}-800.jpg" width="${m.photo ? m.photo.w : 800}" height="${m.photo ? m.photo.h : 1000}" alt="${esc(m.name)}"${m.photo ? ' class="as-is"' : ''}${eager ? '' : ' loading="lazy"'}></picture>`;
 const members = team.filter((m) => !m.draft);
 const linkLabels = { linkedin: 'LinkedIn', facebook: 'Facebook' };
 const teamLinks = (m) =>

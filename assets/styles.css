@@ -520,3 +520,4 @@ mark { background: var(--tape-soft); color: inherit; border-radius: 2px; box-sha
 .brand strong { white-space: nowrap; }
 .team-links { display: flex; gap: 1.25rem; margin: 1rem 0 0; }
 .team-links a { font-weight: 600; text-decoration-color: var(--tape); text-decoration-thickness: 2px; }
+.team-photo img.as-is { aspect-ratio: auto; }
